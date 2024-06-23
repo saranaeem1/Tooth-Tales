@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tooth_tales/reusable_widgets/reusable_widget.dart';
+import 'package:tooth_tales/screens/login.dart';
+import 'package:tooth_tales/models/userModel.dart';
+import '../services/firestore_service.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
+
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _userNameTextController = TextEditingController();
+  bool _isDoctor = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.cyan,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
+            child: Column(
+              children: [
+                Image.asset("assets/Images/login.png", width: 250),
+                Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Create your account",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 50),
+                reusableTextField("Enter Username", Icons.person_outline, false, _userNameTextController),
+                SizedBox(height: 20),
+                reusableTextField("Enter Email", Icons.email_outlined, false, _emailTextController),
+                SizedBox(height: 20),
+                reusableTextField("Enter Password", Icons.lock_outlined, true, _passwordTextController),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Are you a doctor?",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Switch(
+                      value: _isDoctor,
+                      onChanged: (value) {
+                        setState(() {
+                          _isDoctor = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                signInSignUpButton(context, false, _registerUser), // Use _registerUser function directly
+                LoginOption(context),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _registerUser() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailTextController.text,
+        password: _passwordTextController.text,
+      );
+
+      // Print the user ID for debugging
+      String userId = userCredential.user!.uid;
+      print('Newly registered user ID: $userId');
+
+      // Create a UserAccounts instance to save to Firestore
+      UserAccounts userAccount = UserAccounts(
+        id: userId,
+        userName: _userNameTextController.text,
+        password: _passwordTextController.text,
+        isDoctor: _isDoctor,
+      );
+
+      // Save user info to Firestore using FirestoreService
+      await FirestoreService<UserAccounts>('users').addItemWithId(userAccount, userId);
+
+      // Update user display name based on _isDoctor
+      User? user = userCredential.user;
+      if (user != null) {
+        await user.updateDisplayName(_isDoctor ? 'Doctor' : 'User');
+        // Redirect to login screen
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
+    } catch (error) {
+      print("Error registering user: $error");
+      // Handle specific error cases here
+    }
+  }
+}
+
+Row LoginOption(BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const Text("Already have an account?", style: TextStyle(color: Colors.white70)),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        },
+        child: const Text(
+          " Login",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    ],
+  );
+}
