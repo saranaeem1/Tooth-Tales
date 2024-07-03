@@ -43,32 +43,38 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _updateProfile() async {
     String? imageUrl = _imageUrl;
     if (_imageFile != null) {
-      // Upload the image file to Firebase Storage and get the URL
       imageUrl = await _uploadImage(_imageFile!);
     }
 
-    await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
-      'userName': _userNameController.text,
-      'dateOfBirth': _dobController.text,
-      'gender': _gender,
-      'imageUrl': imageUrl,
-    });
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+        'userName': _userNameController.text,
+        'dateOfBirth': _dobController.text,
+        'gender': _gender,
+        'imageUrl': imageUrl,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile updated successfully!')),
+      );
+    } catch (e) {
+      print('Error updating profile: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: $e')),
+      );
+    }
   }
 
   Future<String?> _uploadImage(File imageFile) async {
     try {
-      // Create a reference to the location you want to upload to in Firebase Storage
       String userId = FirebaseAuth.instance.currentUser!.uid;
       Reference storageReference = FirebaseStorage.instance
           .ref()
           .child('user_profiles')
           .child('$userId.jpg');
 
-      // Upload the file to Firebase Storage
       UploadTask uploadTask = storageReference.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
-
-      // Get the download URL
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
@@ -91,35 +97,54 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile Page'),
+        title: Text('Profile Page', style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
+        backgroundColor: Colors.cyan,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: _imageFile != null
-                    ? FileImage(_imageFile!)
-                    : _imageUrl != null
-                    ? NetworkImage(_imageUrl!)
-                    : AssetImage('assets/Images/avatar.png') as ImageProvider,
+            Center(
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundImage: _imageFile != null
+                      ? FileImage(_imageFile!)
+                      : _imageUrl != null
+                      ? NetworkImage(_imageUrl!)
+                      : AssetImage('assets/Images/avatar.png') as ImageProvider,
+                  child: _imageFile == null && _imageUrl == null
+                      ? Icon(Icons.camera_alt, size: 40, color: Colors.white.withOpacity(0.7))
+                      : null,
+                ),
               ),
             ),
+            SizedBox(height: 16),
             TextField(
               controller: _userNameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              ),
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
+            SizedBox(height: 16),
             TextField(
               controller: _dobController,
               decoration: InputDecoration(
                 labelText: 'Date of Birth',
                 hintText: 'YYYY-MM-DD',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               ),
               keyboardType: TextInputType.datetime,
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
+            SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: _gender,
               items: ['Male', 'Female', 'Other']
@@ -133,12 +158,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   _gender = value!;
                 });
               },
-              decoration: InputDecoration(labelText: 'Gender'),
+              decoration: InputDecoration(
+                labelText: 'Gender',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             ElevatedButton(
               onPressed: _updateProfile,
-              child: Text('Update Profile'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.cyan, // Button color
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                textStyle: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text('Update Profile', style: TextStyle(color: Colors.white),),
             ),
           ],
         ),

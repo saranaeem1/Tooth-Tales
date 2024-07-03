@@ -72,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 SizedBox(height: 20),
-                signInSignUpButton(context, false, _registerUser), // Use _registerUser function directly
+                signInSignUpButton(context, false, _registerUser),
                 LoginOption(context),
               ],
             ),
@@ -89,11 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordTextController.text,
       );
 
-      // Print the user ID for debugging
       String userId = userCredential.user!.uid;
       print('Newly registered user ID: $userId');
 
-      // Create a UserAccounts instance to save to Firestore
       UserAccounts userAccount = UserAccounts(
         id: userId,
         userName: _userNameTextController.text,
@@ -101,19 +99,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isDoctor: _isDoctor,
       );
 
-      // Save user info to Firestore using FirestoreService
       await FirestoreService<UserAccounts>('users').addItemWithId(userAccount, userId);
 
-      // Update user display name based on _isDoctor
       User? user = userCredential.user;
       if (user != null) {
         await user.updateDisplayName(_isDoctor ? 'Doctor' : 'User');
-        // Redirect to login screen
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration successful! Please log in.')),
+        );
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } catch (error) {
       print("Error registering user: $error");
-      // Handle specific error cases here
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error registering user: $error')),
+      );
     }
   }
 }

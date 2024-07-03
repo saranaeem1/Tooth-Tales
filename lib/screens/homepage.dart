@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tooth_tales/screens/schedule.dart';
 import 'login.dart';
+import 'appointment.dart';
 import 'patientProfile.dart';
 import 'settings_page.dart';
+import 'oralhealth.dart';
+import 'footer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,20 +20,19 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<String> imgSrc = [
-    "assets/Images/toothimg9.png",
     "assets/Images/toothimg7.png",
-    "assets/Images/toothimg4.png",
     "assets/Images/toothimg10.png",
-    "assets/Images/toothimg6.png",
     "assets/Images/toothimg8.png",
   ];
   final List<String> titles = [
-    "Personalized Plan",
     "Brushing Timer",
-    "Dental Products",
     "Dental Health Articles",
-    "Dental Friendly Diet",
-    "Daily Tips",
+    "Oral Health Tips",
+  ];
+  final List<String> link = [
+  '/alarm',
+    '/articles',
+  '/oralhealth',
   ];
 
   String userName = '';
@@ -74,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            _scaffoldKey.currentState!.openDrawer(); // Open drawer using key
+            _scaffoldKey.currentState!.openDrawer();
           },
         ),
       ),
@@ -159,18 +162,6 @@ class _HomePageState extends State<HomePage> {
                       top: 30,
                       left: 15,
                       right: 15,
-                    ),
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          child: Icon(
-                            Icons.sort,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   Padding(
@@ -259,7 +250,8 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.only(top: 20),
                         child: InkWell(
                           onTap: () {
-                            // Handle New Appointment tap
+    Navigator.pushNamed(context, '/doctor');
+
                           },
                           child: Container(
                             width: 380,
@@ -295,7 +287,10 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.only(top: 20),
                         child: InkWell(
                           onTap: () {
-                            // Handle Your Schedule tap
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                            );
                           },
                           child: Container(
                             width: 380,
@@ -328,7 +323,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 25),
+                        padding: EdgeInsets.only(top: 25, bottom: 25,),
                         child: Text(
                           "Dental Care And Tips",
                           style: TextStyle(
@@ -350,7 +345,9 @@ class _HomePageState extends State<HomePage> {
                         itemCount: imgSrc.length,
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(context, link[index]);
+                            },
                             child: Column(
                               children: [
                                 Container(
@@ -396,6 +393,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: FooterScreen(),
     );
   }
 }

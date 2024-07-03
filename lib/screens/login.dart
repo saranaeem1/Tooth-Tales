@@ -8,12 +8,15 @@ import 'package:tooth_tales/screens/doctorHomePage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
+
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +26,14 @@ class _LoginScreenState extends State<LoginScreen> {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+            padding: EdgeInsets.fromLTRB(
+                20, MediaQuery.of(context).size.height * 0.2, 20, 0),
             child: Column(
               children: [
-                Image.asset("assets/Images/login.png", width: 250,),
+                Image.asset(
+                  "assets/Images/login.png",
+                  width: 250,
+                ),
                 Text(
                   "Login",
                   style: TextStyle(
@@ -36,9 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 50),
-                reusableTextField("Enter Email", Icons.person_outline, false, _emailTextController),
+                reusableTextField("Enter Email", Icons.person_outline, false,
+                    _emailTextController),
                 SizedBox(height: 20),
-                reusableTextField("Enter Password", Icons.lock_outlined, true, _passwordTextController),
+                reusableTextField("Enter Password", Icons.lock_outlined, true,
+                    _passwordTextController),
                 SizedBox(height: 20),
                 signInSignUpButton(context, true, _signInUser),
                 signUpOption(context),
@@ -49,9 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   void _signInUser() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
         email: _emailTextController.text,
         password: _passwordTextController.text,
       );
@@ -64,19 +75,28 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userDoc.exists) {
         print('User document data: ${userDoc.data()}');
         bool isDoctor = userDoc.get('isDoctor');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!')),
+        );
         if (isDoctor) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DoctorHomePage()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => DoctorHomePage()));
         } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
         }
       } else {
         print('User document does not exist in Firestore');
       }
     } catch (error) {
       print("Error signing in: $error");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing in: $error')),
+      );
     }
   }
 }
+
 Row signUpOption(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
