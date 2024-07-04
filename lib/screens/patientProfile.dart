@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile Page', style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
+        title: Text('Profile Page', style: TextStyle(color: Colors.white, fontFamily: 'Poppins-Regular')),
         backgroundColor: Colors.cyan,
         foregroundColor: Colors.white,
       ),
@@ -130,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               ),
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(fontFamily: 'Poppins-Regular'),
             ),
             SizedBox(height: 16),
             TextField(
@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               ),
               keyboardType: TextInputType.datetime,
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(fontFamily: 'Poppins-Regular'),
             ),
             SizedBox(height: 16),
             DropdownButtonFormField<String>(

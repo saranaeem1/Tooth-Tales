@@ -240,7 +240,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 ),
-                style: TextStyle(fontFamily: 'Poppins'),
+                style: TextStyle(fontFamily: 'Poppins-Regular'),
               ),
               SizedBox(height: 16),
               TextField(
@@ -250,7 +250,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 ),
-                style: TextStyle(fontFamily: 'Poppins'),
+                style: TextStyle(fontFamily: 'Poppins-Regular'),
               ),
               SizedBox(height: 16),
               TextField(
@@ -260,7 +260,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 ),
-                style: TextStyle(fontFamily: 'Poppins'),
+                style: TextStyle(fontFamily: 'Poppins-Regular'),
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -291,7 +291,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 ),
                 maxLines: 4,
-                style: TextStyle(fontFamily: 'Poppins'),
+                style: TextStyle(fontFamily: 'Poppins-Regular'),
               ),
               SizedBox(height: 20),
               Text('Availability', style: Theme.of(context).textTheme.headline6),

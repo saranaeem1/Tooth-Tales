@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tooth_tales/screens/article.dart';
 import 'package:tooth_tales/screens/chat.dart';
+import 'package:tooth_tales/screens/doctorProfile.dart';
+import 'package:tooth_tales/screens/login.dart';
+import 'package:tooth_tales/screens/patientProfile.dart';
 import 'package:tooth_tales/screens/schedule.dart';
+import 'package:tooth_tales/screens/signup.dart';
 import 'package:tooth_tales/start.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:tooth_tales/constants/constant.dart';
@@ -78,11 +82,13 @@ class MyApp extends StatelessWidget {
         '/footer': (context) => FooterScreen(),
         '/alarm': (context) => BrushingAlarmPage(),
         '/alarmstart': (context) => BrushingAlarmScreen(),
-        '/doctor': (context) => DoctorScreen(),  // Ensure you are using the correct screen here
+        '/doctor': (context) => DoctorScreen(),
         '/oralhealth': (context) => OralHealthTipsPage(),
         '/schedule': (context) => ScheduleScreen(),
         '/chat': (context) => ChatScreen(),
         '/articles': (context) => ArticleListScreen(),
+        'patient_profile' : (context) => ProfilePage(),
+        '/doctor-profile': (context) => DoctorProfilePage(),
       },
 
     );

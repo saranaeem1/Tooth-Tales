@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tooth_tales/screens/schedule.dart';
 import 'login.dart';
-import 'appointment.dart';
-import 'patientProfile.dart';
-import 'settings_page.dart';
-import 'oralhealth.dart';
 import 'footer.dart';
 
 class HomePage extends StatefulWidget {
@@ -113,20 +108,7 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
+                Navigator.pushReplacementNamed(context, '/patient_profile');
               },
             ),
             ListTile(
@@ -173,10 +155,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                                );
+                                Navigator.pushNamed(context, '/patient_profile');
                               },
                               child: CircleAvatar(
                                 radius: 30,
@@ -249,10 +228,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: InkWell(
-                          onTap: () {
-    Navigator.pushNamed(context, '/doctor');
-
-                          },
+                          onTap: () {Navigator.pushNamed(context, '/doctor');},
                           child: Container(
                             width: 380,
                             height: 150,
@@ -287,10 +263,7 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.only(top: 20),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ScheduleScreen()),
-                            );
+                            Navigator.pushNamed(context, '/schedule');
                           },
                           child: Container(
                             width: 380,
@@ -337,8 +310,8 @@ class _HomePageState extends State<HomePage> {
                         SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 1,
-                          mainAxisSpacing: 25,
-                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 10,
                         ),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),

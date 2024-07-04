@@ -106,23 +106,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                 style: TextStyle(fontFamily: 'Poppins'),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DoctorProfilePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text(
-                'Settings',
-                style: TextStyle(fontFamily: 'Poppins'),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
+                Navigator.pushNamed(context, '/doctor-profile');
               },
             ),
             ListTile(
