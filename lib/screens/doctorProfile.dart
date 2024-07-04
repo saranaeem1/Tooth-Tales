@@ -97,20 +97,10 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
         'availability': _availability,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Profile updated successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      _showCustomSnackBar(context, 'Profile updated successfully', Colors.green);
     } catch (e) {
       print('Error updating profile: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update profile'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      _showCustomSnackBar(context, 'Failed to update profile', Colors.red);
     }
   }
 
@@ -344,7 +334,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text('Update Profile', style: TextStyle(color: Colors.white),),
+                child: Text('Update Profile', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -352,4 +342,24 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       ),
     );
   }
+}
+
+void _showCustomSnackBar(BuildContext context, String message, Color color) {
+  final snackBar = SnackBar(
+    content: Text(
+      message,
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ),
+    backgroundColor: color,
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    action: SnackBarAction(
+      label: 'Dismiss',
+      textColor: Colors.white,
+      onPressed: () {
+        // Handle dismiss action if needed
+      },
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

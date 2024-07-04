@@ -75,9 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userDoc.exists) {
         print('User document data: ${userDoc.data()}');
         bool isDoctor = userDoc.get('isDoctor');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login successful!')),
-        );
+        _showCustomSnackBar(context, 'Login successful!', Colors.green);
         if (isDoctor) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => DoctorHomePage()));
@@ -90,10 +88,28 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (error) {
       print("Error signing in: $error");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error signing in: $error')),
-      );
+      _showCustomSnackBar(context, 'Error signing in: $error', Colors.red);
     }
+  }
+
+  void _showCustomSnackBar(BuildContext context, String message, Color color) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      action: SnackBarAction(
+        label: 'Dismiss',
+        textColor: Colors.white,
+        onPressed: () {
+          // Some code to undo the change if necessary.
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 

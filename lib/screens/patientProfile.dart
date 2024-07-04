@@ -54,14 +54,10 @@ class _ProfilePageState extends State<ProfilePage> {
         'imageUrl': imageUrl,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Profile updated successfully!')),
-      );
+      _showCustomSnackBar(context, 'Profile updated successfully!', Colors.green);
     } catch (e) {
       print('Error updating profile: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating profile: $e')),
-      );
+      _showCustomSnackBar(context, 'Error updating profile: $e', Colors.red);
     }
   }
 
@@ -182,4 +178,24 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+void _showCustomSnackBar(BuildContext context, String message, Color color) {
+  final snackBar = SnackBar(
+    content: Text(
+      message,
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ),
+    backgroundColor: color,
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    action: SnackBarAction(
+      label: 'Dismiss',
+      textColor: Colors.white,
+      onPressed: () {
+        // Handle dismiss action if needed
+      },
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

@@ -104,17 +104,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
       User? user = userCredential.user;
       if (user != null) {
         await user.updateDisplayName(_isDoctor ? 'Doctor' : 'User');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration successful! Please log in.')),
-        );
+        _showCustomSnackBar(context, 'Registration successful! Please log in.', Colors.green);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } catch (error) {
       print("Error registering user: $error");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error registering user: $error')),
-      );
+      _showCustomSnackBar(context, 'Error registering user: $error', Colors.red);
     }
+  }
+
+  void _showCustomSnackBar(BuildContext context, String message, Color color) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      action: SnackBarAction(
+        label: 'Dismiss',
+        textColor: Colors.white,
+        onPressed: () {
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 
