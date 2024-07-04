@@ -7,40 +7,33 @@ import 'package:tooth_tales/screens/footer.dart';
 class AppointmentScreen extends StatefulWidget {
   final String doctorId;
   final String selectedSlot;
-
   AppointmentScreen({required this.doctorId, required this.selectedSlot});
-
   @override
   _AppointmentScreenState createState() => _AppointmentScreenState();
 }
-
 class _AppointmentScreenState extends State<AppointmentScreen> {
   late Map<String, dynamic> doctorData = {};
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _issueController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
     _fetchDoctorData();
   }
-
   Future<void> _fetchDoctorData() async {
     try {
       DocumentSnapshot doctorDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.doctorId)
           .get();
-
       if (doctorDoc.exists) {
         setState(() {
           doctorData = doctorDoc.data() as Map<String, dynamic>;
         });
       } else {
         print('Doctor not found');
-        // Handle the case where the doctor is not found
       }
     } catch (e) {
       print('Error fetching doctor data: $e');
@@ -53,14 +46,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       String age = _ageController.text.trim();
       String issue = _issueController.text.trim();
 
-      final userId = FirebaseAuth.instance.currentUser?.uid; // Get user ID
+      final userId = FirebaseAuth.instance.currentUser?.uid; 
       if (userId == null) {
         print('No user is currently logged in.');
         return;
       }
 
       try {
-        // Create the appointment instance
         Appointment appointment = Appointment(
           doctorId: widget.doctorId,
           doctorName: doctorData['userName'],
@@ -71,13 +63,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           timestamp: Timestamp.now(),
           userId: userId,
         );
-
-        // Add appointment to Firestore
         DocumentReference docRef = await FirebaseFirestore.instance
             .collection('appointments')
             .add(appointment.toMap());
-
-        // Get the document ID and update the appointment document with it
         String appointmentId = docRef.id;
         await docRef.update({'id': appointmentId});
 
