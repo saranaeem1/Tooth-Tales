@@ -13,9 +13,7 @@ class DoctorScreen extends StatelessWidget {
           'Dentists',
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'Poppins',
-          ),
-        ),
+            fontFamily: 'Poppins',),),
         foregroundColor: Colors.white,
         backgroundColor: Colors.cyan,
       ),
@@ -33,7 +31,6 @@ class DoctorScreen extends StatelessWidget {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
-
             var doctors = snapshot.data!.docs;
 
             return ListView.builder(
@@ -41,34 +38,26 @@ class DoctorScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 var doctor = doctors[index].data() as Map<String, dynamic>;
 
-                // Extract data safely with default values
                 String userName = doctor['userName'] ?? 'Unknown';
                 String speciality = doctor['speciality'] ?? 'Not Specified';
                 String location = doctor['location'] ?? 'Location not available';
-
-                // Initialize formatted appointment time as empty
                 String formattedAppointmentTime = '';
 
-                // Check if appointmentTime exists and handle different formats
                 var appointmentTime = doctor['appointmentTime'];
                 if (appointmentTime != null) {
                   if (appointmentTime is Timestamp) {
-                    // Handle Timestamp
                     DateTime dateTime = appointmentTime.toDate();
                     formattedAppointmentTime = DateFormat('yyyy-MM-dd – HH:mm').format(dateTime);
                   } else if (appointmentTime is String) {
-                    // Handle String
                     formattedAppointmentTime = appointmentTime;
                   } else {
-                    // Handle other unexpected formats
                     print('Unexpected appointmentTime format: $appointmentTime');
                   }
                 }
-
                 return InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, '/desc', arguments: {
-                      'doctorId': doctors[index].id, // Use document ID as doctorId
+                      'doctorId': doctors[index].id, 
                     });
                   },
                   child: Container(
