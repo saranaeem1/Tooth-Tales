@@ -27,10 +27,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday',
-  ];
-
-  // Use a map to store availability for each day
+    'Sunday',];
   Map<String, List<String>> _availability = {
     'Monday': [],
     'Tuesday': [],
@@ -40,13 +37,10 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     'Saturday': [],
     'Sunday': [],
   };
-
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-  }
-
+    _loadUserData();}
   Future<void> _loadUserData() async {
     var userDoc = await FirebaseFirestore.instance
         .collection('users')
